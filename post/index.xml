@@ -1,23 +1,39 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Hugo Theme Basic</title>
-    <link>https://www.example.com/post/</link>
-    <description>Recent content in Posts on Hugo Theme Basic</description>
+    <title>Posts on 中小企業社内IT担当者マイケルの備忘録</title>
+    <link>https://namikoneko.github.io/post/</link>
+    <description>Recent content in Posts on 中小企業社内IT担当者マイケルの備忘録</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
+    <language>ja</language>
     <copyright>© 2016-19 &lt;a href=&#39;https://github.com/siegerts/hugo-theme-basic&#39;&gt;Hugo Theme Basic&lt;/a&gt;. Made by &lt;a href=&#39;https://twitter.com/siegerts&#39;&gt;@siegerts&lt;/a&gt;.</copyright>
-    <lastBuildDate>Sat, 12 Oct 2019 17:41:41 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 12 Oct 2019 18:35:56 +0900</lastBuildDate>
     
-	<atom:link href="https://www.example.com/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://namikoneko.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>Hugoで作ったサイトをGithubPageで公開する</title>
+      <link>https://namikoneko.github.io/post/hugo%E3%81%A7%E4%BD%9C%E3%81%A3%E3%81%9F%E3%82%B5%E3%82%A4%E3%83%88%E3%82%92githubpage%E3%81%A7%E5%85%AC%E9%96%8B%E3%81%99%E3%82%8B/</link>
+      <pubDate>Sat, 12 Oct 2019 18:35:56 +0900</pubDate>
+      
+      <guid>https://namikoneko.github.io/post/hugo%E3%81%A7%E4%BD%9C%E3%81%A3%E3%81%9F%E3%82%B5%E3%82%A4%E3%83%88%E3%82%92githubpage%E3%81%A7%E5%85%AC%E9%96%8B%E3%81%99%E3%82%8B/</guid>
+      <description>初めは，publicディレクトリだけgitで管理してgit pushしてGithubPageに公開していました
+しかし，「本体」は，contentディレクトリにあるmdファイルなので，publicディレクトリの静的ファイルだけgithubにあげると，他のPCからブログを更新できません
+そこで，公式の情報も見て，hugo new siteで作成したディレクトリもgithubにあげることにしました
+公式
+https://gohugo.io/hosting-and-deployment/hosting-on-github/
+参考サイト
+https://qiita.com/h6m3_u/items/5893a61091d258936716
+公式を途中までやり，deploy.shの後半は，参考サイトを参考にしました</description>
+    </item>
+    
+    <item>
       <title>Hugo備忘</title>
-      <link>https://www.example.com/post/hugo%E5%82%99%E5%BF%98/</link>
+      <link>https://namikoneko.github.io/post/hugo%E5%82%99%E5%BF%98/</link>
       <pubDate>Sat, 12 Oct 2019 17:41:41 +0900</pubDate>
       
-      <guid>https://www.example.com/post/hugo%E5%82%99%E5%BF%98/</guid>
+      <guid>https://namikoneko.github.io/post/hugo%E5%82%99%E5%BF%98/</guid>
       <description>記事作成
 hugo new post/[title].md  記事編集
 vim content/post/[title].md  ローカルのブラウザで確認
@@ -31,10 +47,10 @@ draft: true  デプロイ
     
     <item>
       <title>Git備忘</title>
-      <link>https://www.example.com/post/git%E5%82%99%E5%BF%98/</link>
+      <link>https://namikoneko.github.io/post/git%E5%82%99%E5%BF%98/</link>
       <pubDate>Sat, 12 Oct 2019 17:34:09 +0900</pubDate>
       
-      <guid>https://www.example.com/post/git%E5%82%99%E5%BF%98/</guid>
+      <guid>https://namikoneko.github.io/post/git%E5%82%99%E5%BF%98/</guid>
       <description>作業ディレクトリの内容を過去のものに変更できる
 git checkout id  最後は，HEADをmasterに戻す そうしないとdetached HEADと言われる
 git checkout master  commit後に小さな変更をして，commitを修正したいとき
@@ -46,10 +62,10 @@ git pull  </description>
     
     <item>
       <title>Test</title>
-      <link>https://www.example.com/post/test/</link>
+      <link>https://namikoneko.github.io/post/test/</link>
       <pubDate>Sat, 12 Oct 2019 16:00:46 +0900</pubDate>
       
-      <guid>https://www.example.com/post/test/</guid>
+      <guid>https://namikoneko.github.io/post/test/</guid>
       <description>コンテンツ
 hoge</description>
     </item>
