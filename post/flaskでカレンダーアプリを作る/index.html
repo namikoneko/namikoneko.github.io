@@ -319,9 +319,25 @@ PMonth = str(myYearP) + str(myMonthP)
 
 <p>このままだと，insertやupdateすると，今月のカレンダーに戻っておかしいので，年月を保持するように修正する。</p>
 
-<p>insertは，ins.htmlに渡す日付から，年月文字列を作る。</p>
+<p>insertは，ins.htmlに渡す日付から，年月文字列も作って渡す。</p>
 
-<p>updateは，idで抽出したレコードの日付から，年月文字列を作る。</p>
+<pre><code>YM = mydate[:4] + mydate[5:7]
+</code></pre>
+
+<p>ins.htmlから，<code>type=&quot;hidden&quot;</code>で，ins_exeコントローラーに渡す。</p>
+
+<p>updateは，idで抽出したレコードの日付から，年月文字列を作って，upd.htmlに渡す。</p>
+
+<pre><code>YM = str(date)[:4] + str(date)[5:7]
+</code></pre>
+
+<p>upd.htmlから，<code>type=&quot;hidden&quot;</code>で，upd_exeコントローラーに渡す。</p>
+
+<h2 id="flaskにbasic認証をかける">flaskにBasic認証をかける</h2>
+
+<p>以下のサイトを参考にした。</p>
+
+<p><a href="https://qiita.com/mitch0807/items/d5e354a4e6e5b4f04bd6">https://qiita.com/mitch0807/items/d5e354a4e6e5b4f04bd6</a></p>
 
       </article>
 

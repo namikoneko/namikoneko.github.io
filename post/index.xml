@@ -123,8 +123,9 @@ heroku pg:psqlで，そのディレクトリに紐付いたアプリに紐付い
 sql文は，大文字でなければダメらしい
 db_uri = os.environ.get(&#39;DATABASE_URL&#39;)  https://qiita.com/croquette0212/items/9b4dc5377e7d6f292671
 db_uriのところの変数として，公式をコピペしてDATABASE_URLを使っていたら，接続できず大ハマリした。
-datasetを使うなら，以下のようになる。
-db = dataset.connect(&#39;db_uri&#39;) echo python-3.6.9 &amp;gt; runtime.txt pip freeze &amp;gt; requirements.</description>
+DATABASE_URLを確認したければ，以下。
+heroku pg:credentials:url  datasetを使うなら，以下のようになる。
+db = dataset.connect(&#39;db_uri&#39;) echo python-3.6.9 &amp;gt; runtime.</description>
     </item>
     
     <item>
