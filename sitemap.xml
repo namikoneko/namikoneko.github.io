@@ -3,17 +3,42 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://namikoneko.github.io/post/hugo%E3%81%A7%E4%BD%9C%E3%81%A3%E3%81%9F%E3%82%B5%E3%82%A4%E3%83%88%E3%82%92githubpage%E3%81%A7%E5%85%AC%E9%96%8B%E3%81%99%E3%82%8B/</loc>
-    <lastmod>2019-10-12T18:35:56+09:00</lastmod>
+    <loc>https://namikoneko.github.io/post/html_template/</loc>
+    <lastmod>2019-10-14T21:23:23+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://namikoneko.github.io/post/</loc>
-    <lastmod>2019-10-12T18:35:56+09:00</lastmod>
+    <lastmod>2019-10-14T21:23:23+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://namikoneko.github.io/</loc>
+    <lastmod>2019-10-14T21:23:23+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://namikoneko.github.io/post/dataset%E5%82%99%E5%BF%98/</loc>
+    <lastmod>2019-10-14T10:15:48+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://namikoneko.github.io/post/flask%E3%81%A7%E3%82%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92%E4%BD%9C%E3%82%8B/</loc>
+    <lastmod>2019-10-13T21:03:06+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://namikoneko.github.io/post/postgresql%E5%82%99%E5%BF%98/</loc>
+    <lastmod>2019-10-13T20:40:43+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://namikoneko.github.io/post/heroku%E5%82%99%E5%BF%98/</loc>
+    <lastmod>2019-10-13T16:21:22+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://namikoneko.github.io/post/hugo%E3%81%A7%E4%BD%9C%E3%81%A3%E3%81%9F%E3%82%B5%E3%82%A4%E3%83%88%E3%82%92githubpage%E3%81%A7%E5%85%AC%E9%96%8B%E3%81%99%E3%82%8B/</loc>
     <lastmod>2019-10-12T18:35:56+09:00</lastmod>
   </url>
   

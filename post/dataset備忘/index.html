@@ -19,16 +19,16 @@
 
 <meta property="og:type" content="article" />
 <meta property="og:description" content="" />
-<meta property="og:title" content="Hugo備忘" />
+<meta property="og:title" content="Dataset備忘" />
 <meta property="og:site_name" content="中小企業の社内IT担当者マイケルの備忘録" />
 <meta property="og:image" content="" />
 <meta property="og:image:type" content="image/jpeg" />
 <meta property="og:image:width" content="" />
 <meta property="og:image:height" content="" />
-<meta property="og:url" content="https://namikoneko.github.io/post/hugo%E5%82%99%E5%BF%98/" />
+<meta property="og:url" content="https://namikoneko.github.io/post/dataset%E5%82%99%E5%BF%98/" />
 <meta property="og:locale" content="ja" />
-<meta property="article:published_time" content="2019-10-12
-" /> <meta property="article:modified_time" content="2019-10-12
+<meta property="article:published_time" content="2019-10-14
+" /> <meta property="article:modified_time" content="2019-10-14
 " />
 
 
@@ -39,28 +39,25 @@
 <meta name="twitter:creator" content="@siegerts" />
 <meta
   name="twitter:title"
-  content="Hugo備忘 | 中小企業の社内IT担当者マイケルの備忘録"
+  content="Dataset備忘 | 中小企業の社内IT担当者マイケルの備忘録"
 />
 <meta
   name="twitter:description"
-  content="記事作成
-hugo new post/[title].md  記事編集
-open content/post  sumlime textで編集
-ローカルのブラウザで確認
-hugo server --watch hugo server -D  コード(markdown記法)
-半角スペース4文字かタブ
-vimなら，&gt;&gt;でタブ入力
-false または 0 にする
-draft: true  デプロイ
-./deploy.sh  |"
+  content=" dataset.pyのような名前のファイルがあると，そのファイルを探してしまうので，attribusionエラーになる。
+複数回，はまったので注意する。
+公式
+https://dataset.readthedocs.io/en/latest/quickstart.html
+検索 あいまい検索をするときだけ，db[&#39;posts&#39;].tableとtableをつける(らしい)。
+cは，カラムの意味と思われる。
+db = dataset.connect(DB_URL) table = db[&#39;posts&#39;].table stmt = table.select(table.c.title.like(&#39;%t%&#39;)) results = db.query(stmt) for result in results: print(result[&#39;title&#39;])  |"
 />
 <meta name="twitter:image:src" content="" />
-<meta name="twitter:domain" content="https://namikoneko.github.io/post/hugo%E5%82%99%E5%BF%98/" />
+<meta name="twitter:domain" content="https://namikoneko.github.io/post/dataset%E5%82%99%E5%BF%98/" />
 
 
 
-    <title>Hugo備忘</title>
-    <link rel="canonical" href="https://namikoneko.github.io/post/hugo%E5%82%99%E5%BF%98/" />
+    <title>Dataset備忘</title>
+    <link rel="canonical" href="https://namikoneko.github.io/post/dataset%E5%82%99%E5%BF%98/" />
 
 
     <link
@@ -116,46 +113,35 @@ if (!doNotTrack) {
   <a href="/post" class="b bb bw1 pb1 no-underline black">blog</a>
 
   <section id="main" class="mt5">
-    <h1 itemprop="name" id="title">Hugo備忘</h1>
-    <span class="f6 gray">October 12, 2019</span>
+    <h1 itemprop="name" id="title">Dataset備忘</h1>
+    <span class="f6 gray">October 14, 2019</span>
 
       <article itemprop="articleBody" id="content" class="w-90 lh-copy">
-        <p>記事作成</p>
+        
 
-<pre><code>hugo new post/[title].md
-</code></pre>
+<p><code>dataset.py</code>のような名前のファイルがあると，そのファイルを探してしまうので，attribusionエラーになる。<br />
+複数回，はまったので注意する。</p>
 
-<p>記事編集</p>
+<p>公式<br />
+<a href="https://dataset.readthedocs.io/en/latest/quickstart.html">https://dataset.readthedocs.io/en/latest/quickstart.html</a></p>
 
-<pre><code>open content/post
-</code></pre>
+<h3 id="検索">検索</h3>
 
-<p>sumlime textで編集</p>
+<p>あいまい検索をするときだけ，<code>db['posts'].table</code>と<code>table</code>をつける(らしい)。<br />
+<code>c</code>は，カラムの意味と思われる。</p>
 
-<p>ローカルのブラウザで確認</p>
-
-<pre><code>hugo server --watch
-hugo server -D
-</code></pre>
-
-<p>コード(markdown記法)<br />
-半角スペース4文字かタブ<br />
-vimなら，&gt;&gt;でタブ入力</p>
-
-<p>false または 0 にする</p>
-
-<pre><code>draft: true
-</code></pre>
-
-<p>デプロイ</p>
-
-<pre><code>./deploy.sh
+<pre><code>db = dataset.connect(DB_URL)
+table = db['posts'].table
+stmt = table.select(table.c.title.like('%t%'))
+results = db.query(stmt)
+for result in results:
+    print(result['title'])
 </code></pre>
 
       </article>
 
       
-      <span class="f6 gray mv3" title="Lastmod: October 12, 2019. Published at: 2019-10-12.">
+      <span class="f6 gray mv3" title="Lastmod: October 14, 2019. Published at: 2019-10-14.">
         
       </span>
 

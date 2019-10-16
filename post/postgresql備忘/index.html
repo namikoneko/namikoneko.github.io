@@ -19,16 +19,16 @@
 
 <meta property="og:type" content="article" />
 <meta property="og:description" content="" />
-<meta property="og:title" content="Hugo備忘" />
+<meta property="og:title" content="Postgresql備忘" />
 <meta property="og:site_name" content="中小企業の社内IT担当者マイケルの備忘録" />
 <meta property="og:image" content="" />
 <meta property="og:image:type" content="image/jpeg" />
 <meta property="og:image:width" content="" />
 <meta property="og:image:height" content="" />
-<meta property="og:url" content="https://namikoneko.github.io/post/hugo%E5%82%99%E5%BF%98/" />
+<meta property="og:url" content="https://namikoneko.github.io/post/postgresql%E5%82%99%E5%BF%98/" />
 <meta property="og:locale" content="ja" />
-<meta property="article:published_time" content="2019-10-12
-" /> <meta property="article:modified_time" content="2019-10-12
+<meta property="article:published_time" content="2019-10-13
+" /> <meta property="article:modified_time" content="2019-10-13
 " />
 
 
@@ -39,28 +39,37 @@
 <meta name="twitter:creator" content="@siegerts" />
 <meta
   name="twitter:title"
-  content="Hugo備忘 | 中小企業の社内IT担当者マイケルの備忘録"
+  content="Postgresql備忘 | 中小企業の社内IT担当者マイケルの備忘録"
 />
 <meta
   name="twitter:description"
-  content="記事作成
-hugo new post/[title].md  記事編集
-open content/post  sumlime textで編集
-ローカルのブラウザで確認
-hugo server --watch hugo server -D  コード(markdown記法)
-半角スペース4文字かタブ
-vimなら，&gt;&gt;でタブ入力
-false または 0 にする
-draft: true  デプロイ
-./deploy.sh  |"
+  content="psql -l　データベース一覧
+createdb データベース名　データベース作成
+dropdb データベース名　データベース削除
+psql データベース名　データベースに接続
+help ヘルプが出る
+\? よく使うコマンド
+\l データベース一覧
+\q 終了（quit）
+テーブル作成
+create table テーブル名 (id SERIAL, title varchar(255), body text);  SERIALは，自動採番
+\dt すべてのテーブルのスキーマ（data table?）
+\d テーブル名 特定のテーブルのスキーマ
+テーブル名の変更
+alter table テーブル名 rename to 新テーブル名  テーブル削除
+drop table テーブル名  外部ファイルのコマンドを実行
+\i ファイル名　インタラクティブではないのに。
+レコード挿入
+insert into テーブル名 (title,body) values(‘hoge’,‘foo’);  複数レコードを挿入
+insert into テーブル名 (title,body) values (‘hoge1’,‘foo1’), (‘hoge2’,‘foo2’), (‘hoge3’,‘foo3’);  |"
 />
 <meta name="twitter:image:src" content="" />
-<meta name="twitter:domain" content="https://namikoneko.github.io/post/hugo%E5%82%99%E5%BF%98/" />
+<meta name="twitter:domain" content="https://namikoneko.github.io/post/postgresql%E5%82%99%E5%BF%98/" />
 
 
 
-    <title>Hugo備忘</title>
-    <link rel="canonical" href="https://namikoneko.github.io/post/hugo%E5%82%99%E5%BF%98/" />
+    <title>Postgresql備忘</title>
+    <link rel="canonical" href="https://namikoneko.github.io/post/postgresql%E5%82%99%E5%BF%98/" />
 
 
     <link
@@ -116,46 +125,60 @@ if (!doNotTrack) {
   <a href="/post" class="b bb bw1 pb1 no-underline black">blog</a>
 
   <section id="main" class="mt5">
-    <h1 itemprop="name" id="title">Hugo備忘</h1>
-    <span class="f6 gray">October 12, 2019</span>
+    <h1 itemprop="name" id="title">Postgresql備忘</h1>
+    <span class="f6 gray">October 13, 2019</span>
 
       <article itemprop="articleBody" id="content" class="w-90 lh-copy">
-        <p>記事作成</p>
+        <p>psql -l　データベース一覧<br />
+createdb データベース名　データベース作成<br />
+dropdb データベース名　データベース削除<br />
+psql データベース名　データベースに接続</p>
 
-<pre><code>hugo new post/[title].md
+<p>help ヘルプが出る<br />
+\? よく使うコマンド<br />
+\l データベース一覧<br />
+\q 終了（quit）</p>
+
+<p>テーブル作成</p>
+
+<pre><code>create table テーブル名 (id SERIAL, title varchar(255), body text);
 </code></pre>
 
-<p>記事編集</p>
+<p><code>SERIAL</code>は，自動採番</p>
 
-<pre><code>open content/post
+<p>\dt すべてのテーブルのスキーマ（data table?）<br />
+\d テーブル名 特定のテーブルのスキーマ</p>
+
+<p>テーブル名の変更</p>
+
+<pre><code>alter table テーブル名 rename to 新テーブル名
 </code></pre>
 
-<p>sumlime textで編集</p>
+<p>テーブル削除</p>
 
-<p>ローカルのブラウザで確認</p>
-
-<pre><code>hugo server --watch
-hugo server -D
+<pre><code>drop table テーブル名
 </code></pre>
 
-<p>コード(markdown記法)<br />
-半角スペース4文字かタブ<br />
-vimなら，&gt;&gt;でタブ入力</p>
+<p>外部ファイルのコマンドを実行<br />
+\i ファイル名　インタラクティブではないのに。</p>
 
-<p>false または 0 にする</p>
+<p>レコード挿入</p>
 
-<pre><code>draft: true
+<pre><code>insert into テーブル名 (title,body) values(‘hoge’,‘foo’);
 </code></pre>
 
-<p>デプロイ</p>
+<p>複数レコードを挿入</p>
 
-<pre><code>./deploy.sh
+<pre><code>insert into テーブル名 (title,body) values
+(‘hoge1’,‘foo1’),
+(‘hoge2’,‘foo2’),
+(‘hoge3’,‘foo3’);
 </code></pre>
 
       </article>
 
       
-      <span class="f6 gray mv3" title="Lastmod: October 12, 2019. Published at: 2019-10-12.">
+      <span class="f6 gray mv3" title="Lastmod: October 13, 2019. Published at: 2019-10-13.">
         
       </span>
 

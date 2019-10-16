@@ -7,10 +7,125 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016-19 &lt;a href=&#39;https://github.com/siegerts/hugo-theme-basic&#39;&gt;Hugo Theme Basic&lt;/a&gt;. Made by &lt;a href=&#39;https://twitter.com/siegerts&#39;&gt;@siegerts&lt;/a&gt;.</copyright>
-    <lastBuildDate>Sat, 12 Oct 2019 18:35:56 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 14 Oct 2019 21:23:23 +0900</lastBuildDate>
     
 	<atom:link href="https://namikoneko.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Html_template</title>
+      <link>https://namikoneko.github.io/post/html_template/</link>
+      <pubDate>Mon, 14 Oct 2019 21:23:23 +0900</pubDate>
+      
+      <guid>https://namikoneko.github.io/post/html_template/</guid>
+      <description>ここのディレクトリにある。
+~Downloads/Documents/190916html_template  article 象のトップ画像，ハンバーガーメニュー
+localhost/190916html_template/article/templates/article.amp.html  テーマ一覧 article gallery themes_1 blog land-see themes_2 e-commerce lune travel
+blog localhost/190916html_template/blog/templates/blog.amp.html  e-commerce localhost/190916html_template/e-commerce/templates/landing.amp.html localhost/190916html_template/land-see/templates/land-see.amp.html localhost/190916html_template/lune/templates/lune.amp.html localhost/190916html_template/themes_1/templates/template_1_article.amp.html localhost/190916html_template/themes_2/templates/home.amp.html localhost/190916html_template/travel/templates/travel.amp.html  localhost/190916html_template/ localhost/190916html_template/ localhost/190916html_template/</description>
+    </item>
+    
+    <item>
+      <title>Dataset備忘</title>
+      <link>https://namikoneko.github.io/post/dataset%E5%82%99%E5%BF%98/</link>
+      <pubDate>Mon, 14 Oct 2019 10:15:48 +0900</pubDate>
+      
+      <guid>https://namikoneko.github.io/post/dataset%E5%82%99%E5%BF%98/</guid>
+      <description> dataset.pyのような名前のファイルがあると，そのファイルを探してしまうので，attribusionエラーになる。
+複数回，はまったので注意する。
+公式
+https://dataset.readthedocs.io/en/latest/quickstart.html
+検索 あいまい検索をするときだけ，db[&#39;posts&#39;].tableとtableをつける(らしい)。
+cは，カラムの意味と思われる。
+db = dataset.connect(DB_URL) table = db[&#39;posts&#39;].table stmt = table.select(table.c.title.like(&#39;%t%&#39;)) results = db.query(stmt) for result in results: print(result[&#39;title&#39;])  </description>
+    </item>
+    
+    <item>
+      <title>Flaskでカレンダーアプリを作る</title>
+      <link>https://namikoneko.github.io/post/flask%E3%81%A7%E3%82%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92%E4%BD%9C%E3%82%8B/</link>
+      <pubDate>Sun, 13 Oct 2019 21:03:06 +0900</pubDate>
+      
+      <guid>https://namikoneko.github.io/post/flask%E3%81%A7%E3%82%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92%E4%BD%9C%E3%82%8B/</guid>
+      <description>なかなか面倒くさい。
+標準ライブラリのcalendarを使う。
+週，日，がリストになった2次元配列を，2回回す。
+新規登録（create） aリンクで，ins/&amp;lt;year&amp;gt;-&amp;lt;month&amp;gt;-&amp;lt;day&amp;gt;というリンク先へ遷移させる。
+ルーティングで日付だけ受け渡して，postgresqlにinsertする。
+更新と削除（update,delete） すべての日で，日付で検索し，レコードがあれば，aリンクを作る。
+リンク先で，更新と削除をする。
+「もし日付にレコードがあったら」と判定するのに苦労した。
+以前，PHPでやったときは，結果の配列があるかを調べるだけで済んだ気がする。
+datasetでは，typeで調べると，（検索結果のオブジェクトは）配列ではないらしい。
+データを取得する通常の方法のように，results（複数行かわからない）を取得したら，
+for result in results:  で回して，idをリストに追加し，このリストの要素数が0以上かで（len(resultsList)）），「日付があったか」どうかを判定することにした。
+もっとも，結局，1日に複数レコードの登録を許すなら，当該日付の「検索結果」を取得し，これを回してidを取得して，このidでupdate用のリンクを作る必要はある。
+つまり，検索結果を回すのは避けられない。
+CRUDアプリを作るのは，かなりの時間がかかる。
+考えものかもしれない。
+構成 作成した順
+一覧(cal) 週と日の2次元配列をfor inで2回回す。
+insert用に，/ins&amp;lt;その日の日付&amp;gt;へaリンクを作る。
+update用に，すべての日付でDBを検索し，検索結果をfor inで回して，HITした場合のレコードidを取得する。
+複数レコードの場合があるので，回す必要がある。
+insコントローラー /ins/&amp;lt;mydate&amp;gt;で，日付のみ一覧から受け渡してもらい，ins.htmlテンプレートへ渡す。
+return render_template(&#39;ins.html&#39;,mydate=mydate)  ins.html(insert用form) ins_exeへ遷移するpostメソッドのform
+&amp;lt;form action=&amp;quot;/ins_exe&amp;quot; method=&amp;quot;post&amp;quot;&amp;gt;  引き渡された当該日付を，dateの初期値に設定しているだけ
+ins_exeコントローラー formのデータを，request.form[&#39;date&#39;]などで受け取り，DBへinsertする。
+table.insert(dict(date=date,title=title,text=text))  updコントローラー 一覧のupd用リンクを受ける。
+idを引き渡されているので，DBに接続，result[&#39;date&#39;]などで各データを取得し，update用formへ渡す。
+return render_template(&#39;upd.html&#39;,myId=myId,date=date,title=title,text=text)  upd.html(update用form) upd_exeへ遷移するpostメソッドのform
+&amp;lt;form action=&amp;quot;/upd_exe&amp;quot; method=&amp;quot;post&amp;quot;&amp;gt;  引き渡された各データを，inputなどのタグの初期値に設定する。
+upd_exeコントローラー formのデータを，request.form[&#39;date&#39;]などで受け取り，updateする。
+data = dict(id=int(myId),date=date,title=title,text=text) table.update(data,[&#39;id&#39;])  delコントローラー レコードを削除する。</description>
+    </item>
+    
+    <item>
+      <title>Postgresql備忘</title>
+      <link>https://namikoneko.github.io/post/postgresql%E5%82%99%E5%BF%98/</link>
+      <pubDate>Sun, 13 Oct 2019 20:40:43 +0900</pubDate>
+      
+      <guid>https://namikoneko.github.io/post/postgresql%E5%82%99%E5%BF%98/</guid>
+      <description>psql -l　データベース一覧
+createdb データベース名　データベース作成
+dropdb データベース名　データベース削除
+psql データベース名　データベースに接続
+help ヘルプが出る
+\? よく使うコマンド
+\l データベース一覧
+\q 終了（quit）
+テーブル作成
+create table テーブル名 (id SERIAL, title varchar(255), body text);  SERIALは，自動採番
+\dt すべてのテーブルのスキーマ（data table?）
+\d テーブル名 特定のテーブルのスキーマ
+テーブル名の変更
+alter table テーブル名 rename to 新テーブル名  テーブル削除
+drop table テーブル名  外部ファイルのコマンドを実行
+\i ファイル名　インタラクティブではないのに。
+レコード挿入
+insert into テーブル名 (title,body) values(‘hoge’,‘foo’);  複数レコードを挿入
+insert into テーブル名 (title,body) values (‘hoge1’,‘foo1’), (‘hoge2’,‘foo2’), (‘hoge3’,‘foo3’);  </description>
+    </item>
+    
+    <item>
+      <title>Heroku備忘</title>
+      <link>https://namikoneko.github.io/post/heroku%E5%82%99%E5%BF%98/</link>
+      <pubDate>Sun, 13 Oct 2019 16:21:22 +0900</pubDate>
+      
+      <guid>https://namikoneko.github.io/post/heroku%E5%82%99%E5%BF%98/</guid>
+      <description>【Python】PythonプログラムをHerokuにデプロイする方法 - Qiita
+https://qiita.com/1-row/items/80f89c8ada2e61f04446
+公式チュートリアル
+https://devcenter.heroku.com/articles/getting-started-with-python#deploy-the-app
+flaskの場合 仮想環境を作成
+python3 -m venv myproject cd myproject  pipでflaskとgunicornをinstall 最低限のapp.pyを作成
+git init git add . git commit -m”1st commit” heroku create “app191006”（リモートの紐づけもされる） heroku addons:create heroku-postgresql:hobby-dev git push heroku master heroku open  アプリをコマンドで削除する場合
+heroku apps:destroy –app (app name)  datasetをpip installするときは，psycopg2もpip installする。 そうしないとエラーになる。
+heroku pg:psqlで，そのディレクトリに紐付いたアプリに紐付いたデータベースに接続できる
+sql文は，大文字でなければダメらしい
+db_uri = os.environ.get(&#39;DATABASE_URL&#39;)  https://qiita.com/croquette0212/items/9b4dc5377e7d6f292671
+db_uriのところの変数として，公式をコピペしてDATABASE_URLを使っていたら，接続できず大ハマリした。
+datasetを使うなら，以下のようになる。
+db = dataset.connect(&#39;db_uri&#39;) echo python-3.6.9 &amp;gt; runtime.txt pip freeze &amp;gt; requirements.</description>
+    </item>
     
     <item>
       <title>Hugoで作ったサイトをGithubPageで公開する</title>
@@ -38,7 +153,8 @@ https://namikoneko.github.io/blog2/</description>
       <guid>https://namikoneko.github.io/post/hugo%E5%82%99%E5%BF%98/</guid>
       <description>記事作成
 hugo new post/[title].md  記事編集
-vim content/post/[title].md  ローカルのブラウザで確認
+open content/post  sumlime textで編集
+ローカルのブラウザで確認
 hugo server --watch hugo server -D  コード(markdown記法)
 半角スペース4文字かタブ
 vimなら，&amp;gt;&amp;gt;でタブ入力

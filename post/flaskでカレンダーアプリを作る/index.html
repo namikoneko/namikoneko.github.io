@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html
+  class=""
+  lang="ja"
+  prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#"
+>
+  <head>
+    <meta charset="utf-8" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="description" content="" />
+<meta name="HandheldFriendly" content="True" />
+<meta name="MobileOptimized" content="320" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+<meta name="keywords" content="">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content="" />
+<meta property="og:title" content="Flaskでカレンダーアプリを作る" />
+<meta property="og:site_name" content="中小企業の社内IT担当者マイケルの備忘録" />
+<meta property="og:image" content="" />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:width" content="" />
+<meta property="og:image:height" content="" />
+<meta property="og:url" content="https://namikoneko.github.io/post/flask%E3%81%A7%E3%82%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92%E4%BD%9C%E3%82%8B/" />
+<meta property="og:locale" content="ja" />
+<meta property="article:published_time" content="2019-10-13
+" /> <meta property="article:modified_time" content="2019-10-13
+" />
+
+
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@siegerts" />
+<meta name="twitter:creator" content="@siegerts" />
+<meta
+  name="twitter:title"
+  content="Flaskでカレンダーアプリを作る | 中小企業の社内IT担当者マイケルの備忘録"
+/>
+<meta
+  name="twitter:description"
+  content="なかなか面倒くさい。
+標準ライブラリのcalendarを使う。
+週，日，がリストになった2次元配列を，2回回す。
+新規登録（create） aリンクで，ins/&lt;year&gt;-&lt;month&gt;-&lt;day&gt;というリンク先へ遷移させる。
+ルーティングで日付だけ受け渡して，postgresqlにinsertする。
+更新と削除（update,delete） すべての日で，日付で検索し，レコードがあれば，aリンクを作る。
+リンク先で，更新と削除をする。
+「もし日付にレコードがあったら」と判定するのに苦労した。
+以前，PHPでやったときは，結果の配列があるかを調べるだけで済んだ気がする。
+datasetでは，typeで調べると，（検索結果のオブジェクトは）配列ではないらしい。
+データを取得する通常の方法のように，results（複数行かわからない）を取得したら，
+for result in results:  で回して，idをリストに追加し，このリストの要素数が0以上かで（len(resultsList)）），「日付があったか」どうかを判定することにした。
+もっとも，結局，1日に複数レコードの登録を許すなら，当該日付の「検索結果」を取得し，これを回してidを取得して，このidでupdate用のリンクを作る必要はある。
+つまり，検索結果を回すのは避けられない。
+CRUDアプリを作るのは，かなりの時間がかかる。
+考えものかもしれない。
+構成 作成した順
+一覧(cal) 週と日の2次元配列をfor inで2回回す。
+insert用に，/ins&lt;その日の日付&gt;へaリンクを作る。
+update用に，すべての日付でDBを検索し，検索結果をfor inで回して，HITした場合のレコードidを取得する。
+複数レコードの場合があるので，回す必要がある。
+insコントローラー /ins/&lt;mydate&gt;で，日付のみ一覧から受け渡してもらい，ins.htmlテンプレートへ渡す。
+return render_template(&#39;ins.html&#39;,mydate=mydate)  ins.html(insert用form) ins_exeへ遷移するpostメソッドのform
+&lt;form action=&quot;/ins_exe&quot; method=&quot;post&quot;&gt;  引き渡された当該日付を，dateの初期値に設定しているだけ
+ins_exeコントローラー formのデータを，request.form[&#39;date&#39;]などで受け取り，DBへinsertする。
+table.insert(dict(date=date,title=title,text=text))  updコントローラー 一覧のupd用リンクを受ける。
+idを引き渡されているので，DBに接続，result[&#39;date&#39;]などで各データを取得し，update用formへ渡す。
+return render_template(&#39;upd.html&#39;,myId=myId,date=date,title=title,text=text)  upd.html(update用form) upd_exeへ遷移するpostメソッドのform
+&lt;form action=&quot;/upd_exe&quot; method=&quot;post&quot;&gt;  引き渡された各データを，inputなどのタグの初期値に設定する。
+upd_exeコントローラー formのデータを，request.form[&#39;date&#39;]などで受け取り，updateする。
+data = dict(id=int(myId),date=date,title=title,text=text) table.update(data,[&#39;id&#39;])  delコントローラー レコードを削除する。|"
+/>
+<meta name="twitter:image:src" content="" />
+<meta name="twitter:domain" content="https://namikoneko.github.io/post/flask%E3%81%A7%E3%82%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92%E4%BD%9C%E3%82%8B/" />
+
+
+
+    <title>Flaskでカレンダーアプリを作る</title>
+    <link rel="canonical" href="https://namikoneko.github.io/post/flask%E3%81%A7%E3%82%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC%E3%82%A2%E3%83%97%E3%83%AA%E3%82%92%E4%BD%9C%E3%82%8B/" />
+
+
+    <link
+  rel="stylesheet"
+  href="https://unpkg.com/tachyons@4.11.1/css/tachyons.min.css"
+/>
+
+<link rel="stylesheet" href="https://namikoneko.github.io/css/style.css" />
+
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/highlightjs@9.12.0/styles/github-gist.css"
+/>
+
+
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	if (window.sessionStorage) {
+		var GA_SESSION_STORAGE_KEY = 'ga:clientId';
+		ga('create', 'UA-XXXXXXXXX-X', {
+	    'storage': 'none',
+	    'clientId': sessionStorage.getItem(GA_SESSION_STORAGE_KEY)
+	   });
+	   ga(function(tracker) {
+	    sessionStorage.setItem(GA_SESSION_STORAGE_KEY, tracker.get('clientId'));
+	   });
+   }
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  </head>
+
+
+<body
+  lang="ja"
+  class="sans-serif w-90 w-80-m w-60-ns center mv2 mv5-ns"
+  itemscope
+  itemtype="http://schema.org/Article"
+>
+  
+  <span class="b">/ </span>
+  <a href="https://namikoneko.github.io/" class="b bb bw1 pb1 no-underline black">中小企業の社内IT担当者マイケルの備忘録</a>
+  <span class="b"> / </span>
+  <a href="/post" class="b bb bw1 pb1 no-underline black">blog</a>
+
+  <section id="main" class="mt5">
+    <h1 itemprop="name" id="title">Flaskでカレンダーアプリを作る</h1>
+    <span class="f6 gray">October 13, 2019</span>
+
+      <article itemprop="articleBody" id="content" class="w-90 lh-copy">
+        
+
+<p>なかなか面倒くさい。</p>
+
+<p>標準ライブラリの<code>calendar</code>を使う。</p>
+
+<p>週，日，がリストになった2次元配列を，2回回す。</p>
+
+<h2 id="新規登録-create">新規登録（create）</h2>
+
+<p>aリンクで，<code>ins/&lt;year&gt;-&lt;month&gt;-&lt;day&gt;</code>というリンク先へ遷移させる。</p>
+
+<p>ルーティングで日付だけ受け渡して，postgresqlにinsertする。</p>
+
+<h2 id="更新と削除-update-delete">更新と削除（update,delete）</h2>
+
+<p>すべての日で，日付で検索し，レコードがあれば，aリンクを作る。</p>
+
+<p>リンク先で，更新と削除をする。</p>
+
+<p>「もし日付にレコードがあったら」と判定するのに苦労した。<br />
+以前，PHPでやったときは，結果の配列があるかを調べるだけで済んだ気がする。</p>
+
+<p><code>dataset</code>では，<code>type</code>で調べると，（検索結果のオブジェクトは）配列ではないらしい。<br />
+データを取得する通常の方法のように，<code>results</code>（複数行かわからない）を取得したら，</p>
+
+<pre><code>for result in results:
+</code></pre>
+
+<p>で回して，<code>id</code>をリストに追加し，このリストの要素数が0以上かで（<code>len(resultsList)</code>）），「日付があったか」どうかを判定することにした。</p>
+
+<p>もっとも，結局，1日に複数レコードの登録を許すなら，当該日付の「検索結果」を取得し，これを回して<code>id</code>を取得して，この<code>id</code>でupdate用のリンクを作る必要はある。<br />
+つまり，検索結果を回すのは避けられない。</p>
+
+<p>CRUDアプリを作るのは，かなりの時間がかかる。<br />
+考えものかもしれない。</p>
+
+<h2 id="構成">構成</h2>
+
+<p>作成した順</p>
+
+<h3 id="一覧-cal">一覧(cal)</h3>
+
+<p>週と日の2次元配列を<code>for in</code>で2回回す。</p>
+
+<p>insert用に，<code>/ins&lt;その日の日付&gt;</code>へaリンクを作る。</p>
+
+<p>update用に，すべての日付でDBを検索し，検索結果を<code>for in</code>で回して，HITした場合のレコードidを取得する。<br />
+複数レコードの場合があるので，回す必要がある。</p>
+
+<h3 id="insコントローラー">insコントローラー</h3>
+
+<p><code>/ins/&lt;mydate&gt;</code>で，日付のみ一覧から受け渡してもらい，<code>ins.html</code>テンプレートへ渡す。</p>
+
+<pre><code>return render_template('ins.html',mydate=mydate)
+</code></pre>
+
+<h3 id="ins-html-insert用form">ins.html(insert用form)</h3>
+
+<p>ins_exeへ遷移するpostメソッドのform</p>
+
+<pre><code>&lt;form action=&quot;/ins_exe&quot; method=&quot;post&quot;&gt;
+</code></pre>
+
+<p>引き渡された当該日付を，dateの初期値に設定しているだけ</p>
+
+<h3 id="ins-exeコントローラー">ins_exeコントローラー</h3>
+
+<p>formのデータを，<code>request.form['date']</code>などで受け取り，DBへinsertする。</p>
+
+<pre><code>table.insert(dict(date=date,title=title,text=text))
+</code></pre>
+
+<h3 id="updコントローラー">updコントローラー</h3>
+
+<p>一覧のupd用リンクを受ける。</p>
+
+<p>idを引き渡されているので，DBに接続，<code>result['date']</code>などで各データを取得し，update用formへ渡す。</p>
+
+<pre><code>return render_template('upd.html',myId=myId,date=date,title=title,text=text)
+</code></pre>
+
+<h3 id="upd-html-update用form">upd.html(update用form)</h3>
+
+<p>upd_exeへ遷移するpostメソッドのform</p>
+
+<pre><code>&lt;form action=&quot;/upd_exe&quot; method=&quot;post&quot;&gt;
+</code></pre>
+
+<p>引き渡された各データを，<code>input</code>などのタグの初期値に設定する。</p>
+
+<h3 id="upd-exeコントローラー">upd_exeコントローラー</h3>
+
+<p>formのデータを，<code>request.form['date']</code>などで受け取り，updateする。</p>
+
+<pre><code>data = dict(id=int(myId),date=date,title=title,text=text)
+table.update(data,['id'])
+</code></pre>
+
+<h3 id="delコントローラー">delコントローラー</h3>
+
+<p>レコードを削除する。</p>
+
+<p><code>upd.html</code>のaリンクで，idをurl(get)で引き渡すようにしておく。</p>
+
+<p><code>def del():</code>は予約語？なのか，エラーになったので，<code>def myDel():</code>にした。</p>
+
+<p>DBに接続して，削除する。</p>
+
+<pre><code>table.delete(id=myId)
+</code></pre>
+
+<h3 id="水平線と改行">水平線と改行</h3>
+
+<p><code>app.py</code>で回しているところで，適当なところに水平線と改行を入れて，形を整える。</p>
+
+<pre><code>calStr.append(Markup('&lt;br&gt;'))#日ごとに改行
+calStr.append(Markup('&lt;hr&gt;'))#週ごとに水平線
+</code></pre>
+
+<h3 id="ページネーション">ページネーション</h3>
+
+<p>このままだと，「今月」しか表示されないので，前後の月に移動するようにする。</p>
+
+<p>大ハマリした。<br />
+下のように書くと，<code>def cal</code>に飛び，変数YMにtestStrの内容を入れてくれる。</p>
+
+<pre><code>return redirect(url_for('cal', YM=testStr))#成功
+</code></pre>
+
+<p>公式では，以下のところに書いてある。<br />
+<code>def profile</code>関数に飛んでいる。</p>
+
+<pre><code>&gt;&gt;&gt; @app.route('/user/&lt;username&gt;')
+... def profile(username): pass
+...
+&gt;&gt;&gt; with app.test_request_context():
+...  print url_for('profile', username='John Doe')
+...
+/user/John%20Doe
+</code></pre>
+
+<p>すごい大変で，後悔し始めた・・・</p>
+
+<p>以下のように，urlに「年月文字列」(例201910)を入れて，年月のデータを保持するようにした。</p>
+
+<pre><code>@app.route('/cal/&lt;YM&gt;')
+def cal(YM):
+</code></pre>
+
+<p>来月と，前月の「年月文字列」を作成した。</p>
+
+<pre><code>#来月
+if (myMonth == 12):
+    myYearN = myYear + 1 
+    myMonthN = 1 
+else:
+    myYearN = myYear 
+    myMonthN = myMonth + 1 
+NMonth = str(myYearN) + str(myMonthN)
+#前月
+if (myMonth == 1): 
+    myYearP = myYear - 1 
+    myMonthP = 12
+else:
+    myYearP = myYear 
+    myMonthP = myMonth - 1 
+PMonth = str(myYearP) + str(myMonthP)
+</code></pre>
+
+<p>これを，index.htmlに渡して，aリンクで，来月と前月へのリンクを作った。</p>
+
+<pre><code>&lt;a href=&quot;/cal/{{ NMonth }}&quot;&gt;next month&lt;/a&gt;
+&lt;a href=&quot;/cal/{{ PMonth }}&quot;&gt;previous month&lt;/a&gt;
+</code></pre>
+
+<p>このままだと，insertやupdateすると，今月のカレンダーに戻っておかしいので，年月を保持するように修正する。</p>
+
+<p>insertは，ins.htmlに渡す日付から，年月文字列を作る。</p>
+
+<p>updateは，idで抽出したレコードの日付から，年月文字列を作る。</p>
+
+      </article>
+
+      
+      <span class="f6 gray mv3" title="Lastmod: October 13, 2019. Published at: 2019-10-13.">
+        
+      </span>
+
+      
+
+  </section>
+
+  <footer>
+    <div>
+      <p class="f6 gray mt6 lh-copy">
+        © 2016-19 <a href='https://github.com/siegerts/hugo-theme-basic'>Hugo Theme Basic</a>. Made by <a href='https://twitter.com/siegerts'>@siegerts</a>.
+      </p>
+    </div>
+  </footer>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+  </body>
+</html>
